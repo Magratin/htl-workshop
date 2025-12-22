@@ -41,9 +41,9 @@ RUN adduser -D -g '' php \
     && chown -R php:php /var/www/html
 
 # Copy Nginx config and Supervisor config
-COPY ./default.conf /etc/nginx/conf.d/default.conf
-COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY ./php-fpm.conf /etc/php84/php-fpm.d/www.conf
+COPY ./docker/development/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY ./docker/development/nginx/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY ./docker/development/nginx/php-fpm.conf /etc/php84/php-fpm.d/www.conf
 
 RUN mkdir -p /var/log && touch /var/log/php-fpm.log && chown -R php:php /var/log
 

@@ -1,6 +1,8 @@
 services:
   web:
-    build: ./docker/development/nginx
+    build:
+      context: .
+      dockerfile: docker/development/Dockerfile
     container_name: htl_workshop_dev_web
     ports:
       - "8080:80"
