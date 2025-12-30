@@ -17,6 +17,10 @@ RUN composer install \
 # =========================
 FROM php:8.4-apache
 
+# PROD_ENV
+ENV APP_ENV=prod
+ENV APP_DEBUG=0
+
 # Install PHP Extension Postgresql
 RUN apt-get update && apt-get install -y libpq-dev \
 && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
@@ -36,6 +40,12 @@ COPY ./docker/production/apache/default.conf /etc/apache2/sites-available/000-de
 # Copy app
 COPY  . .
 COPY --from=vendor /app/vendor ./vendor
+
+# Install assets
+RUN php bin/console importmap:install --no-interaction && php bin/console cache:clear --env=prod
+
+# Permissions
+RUN mkdir -p var/cache var/log && chown -R www-data:www-data var assets public
 
 EXPOSE 80
 VOLUME ["/var/www/html/public/uploads"]
